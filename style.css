@@ -1,0 +1,13 @@
+.searchForm {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    flex:1;
+    flex-direction: column;
+}
+
+.dash { 
+    background-color: #3389bd;
+    background-image: linear-gradient(225deg, #3389bd 0%, #2e1085 50%, #470dbf 100%);
+    font-weight:bodler;
+}
