@@ -1,19 +1,79 @@
-const searchBtn = document.querySelector("#searchBtn");
-const inputCity = document.querySelector("#inputCity");
-const citOutput = document.querySelector("#cityOutput")
-searchBtn.addEventListener("click", formSubmit);
+const btn_Search = document.querySelector("#searchBtn");
+const input_City = document.querySelector("#inputCity");
+const ul_CityList = document.querySelector("#eachCityList");
+const tempElement = document.querySelector("#tempDegree");
+btn_Search.addEventListener("click", formSubmit);
+const tempHolder = document.querySelector("#tempHolder");
+let cityName;
+const eachCityList = document.querySelector("#eachCityList");
 
-function formSubmit() {
-    const cityKey = inputCity.value;
-    
 
-    console.log(cityKey);
+
+function processWeatherData(weatherData) {
+  // console.log(weatherData)
+  //getCityName
+  //  const cityName = {city}
+  //  cityName.innerHTML=input_City;
+ const getTemperature = weatherData.current.temp
+tempElement.textContent = getTemperature
+for (let i = 0; i <5; i++){
+ const  temperatureForecast =  weatherData.daily[i].temp.max
+ var div = document.createElement("div");
+ div.textContent =temperatureForecast;
+ tempHolder.appendChild(div);
+    console.log(temperatureForecast)
 }
-
+var btn = document.createElement("button");
+btn.textContent = cityName;
+eachCityList.appendChild(btn);
+  //getHumidity,
+  //getWeatherIcon
+  //get futureConditions
+  //get uvIndex
+  //get date
+  //get windSpeed
+  //update HTML
+  //update current and future weather
+  console.log(weatherData);
+}
+function formSubmit() {
+    tempHolder.innerHTML = "";
+    cityName =input_City.value;
+  console.log(cityName);
+  getCoords(cityName);
+  
+}
+function getCoords(cityName) {
+  fetch(
+    `http://api.openweathermap.org/geo/1.0/direct?q=${cityName}&limit=1&appid=7551bc2f9ddedf143c9612b73b901427`
+  )
+    .then((response) => response.json())
+    .then((data) => {
+      const lat = data[0].lat;
+      const lon = data[0].lon;
+      console.log(lat, lon);
+      cityData(lat, lon);
+    
+    }
+    ).catch((err)=> alert("Please type a valid city name"))
+    
+}
+function cityData(lat, lon) {
+    fetch(
+        `https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&units=imperial&appid=7551bc2f9ddedf143c9612b73b901427`
+        )
+        .then((response) => response.json())
+        .then((data) => {
+            console.log(data);
+            processWeatherData(data);
+        })
+        .catch((err)=> alert(err))
+}
+//API KEY **** 7551bc2f9ddedf143c9612b73b901427
+//find how to translate city to lat/lon || figure out how to ask for city
 // AS A traveler
 // I WANT to see the weather outlook for multiple cities
 // SO THAT I can plan a trip accordingly
-
 
 // Acceptance Criteria
 
